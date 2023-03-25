@@ -33,9 +33,27 @@ equalsButton.addEventListener('click', () => {
 allClearButton.addEventListener('click', () => {
     allClear();
 })
- function appendNumber(number){
-    currNum += number;
+
+deleteButton.addEventListener('click',() => {
+    currNum = currNum.slice(0,-1);
     currOperand.textContent = currNum;
+})
+
+
+
+
+
+
+ function appendNumber(number){
+    if(prevNum !== "" && currNum !== "" && operator === ""){
+        prevNum = "";
+        currOperand.textContent = currNum;
+    }
+    if(currNum.length <= 11){
+
+        currNum += number;
+        currOperand.textContent = currNum;
+    }
 
  }
 
@@ -57,24 +75,41 @@ function   calculate() {
         }
         prevNum /= currNum ;
     }
+    displayResults();
 
 }
 
 function appendOperator(op){
 
+    if(prevNum === ""){
+        prevNum = currNum;
+        operatorCheck(op);
 
+    }else if (currNum === "") {
+        operatorCheck(op);
+    } else {
+        operator = op;
+        calculate();
+        preOperand.textContent = prevNum + ' ' + operator;
+        currOperand.textContent = "0";
+        currNum = "";
+
+    }
+
+}
+function operatorCheck(op){
     operator = op;
-    calculate();
-    preOperand.textContent = prevNum;
-    currNum = '';
-    currOperand.textContent = currNum;
+    preOperand.textContent = prevNum + " " + operator;
+    currOperand.textContent = "0";
+    currNum = "";
 
 }
 function allClear(){
     currNum = "";
     prevNum = "";
+    operator = "";
 
-    preOperand.textContent = currNum;
+    preOperand.textContent = "0";
     currOperand.textContent = prevNum;
 
 }
@@ -85,6 +120,12 @@ function equalAnswer(){
     currOperand.textContent = prevNum;
 
 }
-function clickAnswer(){
+function displayResults(){
+    if(prevNum.length <= 11){
+        currOperand.textContent = prevNum;
+    }
+    preOperand.textContent = "";
+    operator = "";
+    currNum = "";
 
 }
